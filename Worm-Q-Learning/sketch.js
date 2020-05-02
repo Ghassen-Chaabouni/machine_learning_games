@@ -353,6 +353,5 @@ function max_value(table) {
       max_v = table[i];
     }
   }
-console.log("test111");
   return max_v;
 }
