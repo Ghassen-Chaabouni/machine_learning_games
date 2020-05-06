@@ -31,7 +31,7 @@ var END_EPSILONE_DECAYING;
 var epsilon_decay_value;
 
 var observation_space_high = [600, 600, 800, 800];
-var observation_space_low = [0, 0, 0, 0];
+var observation_space_low = [300, 300, 0, 0];
 var action_space_n = 6;
 var descrete_os_win_size=[];
 var q_table;
