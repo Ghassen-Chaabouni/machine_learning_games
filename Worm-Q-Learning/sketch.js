@@ -151,77 +151,76 @@ function setup() {
       }
     }
   }
-
-  
   discrete_state = get_discrete_state(inputs, descrete_os_win_size, observation_space_low);
 }
 
 const interval = setInterval(function() {
   done = true;
   episode = episode + 1;
- }, 10000);
+ }, 30000/4);
 
 
 function draw() {
-    if(done){
-      if ((END_EPSILONE_DECAYING >= episode) && (episode >= START_EPSILONE_DECAYING)){
-         epsilon = epsilon - epsilon_decay_value;
-      }
-    
-      q_table_copy = q_table;
-      console.log("episode: " + episode);
-      console.log("episode reward: " + episode_reward);
-      recreate_my_world();
-      done = false;
-      episode_reward = 0;
-      discrete_state = get_discrete_state(inputs, descrete_os_win_size, observation_space_low);
-  
-    }else{
-      
-      if (Math.random() > epsilon){      
-            action = max_index(q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]]);
-      }else{
-            action = Math.floor(Math.random() * action_space_n) + 0;  
-      }
-  
-     if (action==0) {
-        Body.rotate( bodyA, Math.PI/35);
-      }
-      if(action==1){
-        Body.rotate( bodyA, -Math.PI/35);
-      }
-      if(action==2){
-        Body.rotate( bodyB, Math.PI/35);
-      }
-      if(action==3){
-        Body.rotate( bodyB, -Math.PI/35);
-      }
-      if(action==4){
-        Body.rotate( bodyC, Math.PI/35);
-      }
-      if(action==5){
-        Body.rotate( bodyC, -Math.PI/35);
-      }
-    
-      new_inputs[0] = bodyA.position.y;
-      new_inputs[1] = bodyC.position.y;
+	for (var speed = 0; speed < 4; speed++) {
+		if(done){
+		  if ((END_EPSILONE_DECAYING >= episode) && (episode >= START_EPSILONE_DECAYING)){
+			 epsilon = epsilon - epsilon_decay_value;
+		  }
+		
+		  q_table_copy = q_table;
+		  console.log("episode: " + episode);
+		  console.log("episode reward: " + episode_reward);
+		  recreate_my_world();
+		  done = false;
+		  episode_reward = 0;
+		  discrete_state = get_discrete_state(inputs, descrete_os_win_size, observation_space_low);
+	  
+		}else{
+		  
+		  if (Math.random() > epsilon){      
+				action = max_index(q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]]);
+		  }else{
+				action = Math.floor(Math.random() * action_space_n) + 0;  
+		  }
+	  
+		 if (action==0) {
+			Body.rotate( bodyA, Math.PI/35);
+		  }
+		  if(action==1){
+			Body.rotate( bodyA, -Math.PI/35);
+		  }
+		  if(action==2){
+			Body.rotate( bodyB, Math.PI/35);
+		  }
+		  if(action==3){
+			Body.rotate( bodyB, -Math.PI/35);
+		  }
+		  if(action==4){
+			Body.rotate( bodyC, Math.PI/35);
+		  }
+		  if(action==5){
+			Body.rotate( bodyC, -Math.PI/35);
+		  }
+		
+		  new_inputs[0] = bodyA.position.y;
+		  new_inputs[1] = bodyC.position.y;
 
-      new_inputs[2] = bodyA.position.x;
-      new_inputs[3] = bodyC.position.x;
-      
-      reward = Math.max(600 - bodyA.position.y, 600 - bodyB.position.y, 600 - bodyC.position.y);
-      episode_reward = episode_reward + reward; 
-      new_discrete_state = get_discrete_state(new_inputs, descrete_os_win_size, observation_space_low);
-    
-      max_future_q = max_value(q_table[new_discrete_state[0]][new_discrete_state[1]][new_discrete_state[2]][new_discrete_state[3]]); 
-      current_q = q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]][action];
-      new_q = (1-LEARNING_RATE) * current_q + LEARNING_RATE * (reward + DISCOUNT * max_future_q);     
-      q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]][action] = new_q;       
-      
-      discrete_state = new_discrete_state;
-      
-    }
-  
+		  new_inputs[2] = bodyA.position.x;
+		  new_inputs[3] = bodyC.position.x;
+		  
+		  reward = Math.max(600 - bodyA.position.y, 600 - bodyB.position.y, 600 - bodyC.position.y);
+		  episode_reward = episode_reward + reward; 
+		  new_discrete_state = get_discrete_state(new_inputs, descrete_os_win_size, observation_space_low);
+		
+		  max_future_q = max_value(q_table[new_discrete_state[0]][new_discrete_state[1]][new_discrete_state[2]][new_discrete_state[3]]); 
+		  current_q = q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]][action];
+		  new_q = (1-LEARNING_RATE) * current_q + LEARNING_RATE * (reward + DISCOUNT * max_future_q);     
+		  q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]][action] = new_q;       
+		  
+		  discrete_state = new_discrete_state;
+		  
+		}
+	}
 }
 
 
