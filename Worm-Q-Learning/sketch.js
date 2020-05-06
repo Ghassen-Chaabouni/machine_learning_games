@@ -215,9 +215,8 @@ function draw() {
 		  current_q = q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]][action];
 		  new_q = (1-LEARNING_RATE) * current_q + LEARNING_RATE * (reward + DISCOUNT * max_future_q);     
 		  q_table[discrete_state[0]][discrete_state[1]][discrete_state[2]][discrete_state[3]][action] = new_q;       
-		  console.log(discrete_state);
-		  discrete_state = new_discrete_state;
-		  
+		 
+		  discrete_state = new_discrete_state; 
 		}
 	}
 }
