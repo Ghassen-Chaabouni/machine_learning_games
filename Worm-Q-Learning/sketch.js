@@ -46,7 +46,7 @@ var current_q;
 var new_q;
 var done = false;
 var episode = 0;
-var q_table_size = 80;
+var q_table_size = 60;
 
 function setup() {
   engine = Engine.create(),
