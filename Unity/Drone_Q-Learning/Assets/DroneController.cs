@@ -21,9 +21,9 @@ public class DroneController : MonoBehaviour {
     public float epsilon = 0.5f;
     public int START_EPSILONE_DECAYING = 1;
 
-    private List<int> observation_space_high = new List<int>() {7, 15, 7, 50 };
+    private List<int> observation_space_high = new List<int>() { 50, 50, 50, 50 };
 
-    private List<int> observation_space_low = new List<int>() {-7, -15, -7, 0 };
+    private List<int> observation_space_low = new List<int>() { -50, -50, -50, -50 };
 
     private int action_space_n = 8;
     private float episode_reward = 0.0f;
