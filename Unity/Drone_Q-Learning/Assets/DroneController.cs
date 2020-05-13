@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +29,7 @@ public class DroneController : MonoBehaviour {
     private float episode_reward = 0.0f;
 
     private int episode = 0;
-    public int q_table_size = 50;
+    public int q_table_size = 30;
     private int END_EPSILONE_DECAYING;
     private int epsilon_decay_value;
     private List<float> inputs = new List<float>();
@@ -39,7 +39,7 @@ public class DroneController : MonoBehaviour {
     private List<float> descrete_os_win_size = new List<float>();
 
     public float min_reward = -300.0f;
-    public float max_reward = 20.0f;
+    public float max_reward = 40.0f;
     private List <int> discrete_state = new List<int>();
     private float reward = 0.0f;
     private float variance = 0.0f;
@@ -129,7 +129,7 @@ public class DroneController : MonoBehaviour {
                     for (int d = 0; d < DESCRETE_OS_SIZE[0]; d++)
                     {
                         q_table[a][b][c][d] = new List<float>(action_space_n);
-                        for (int i = 0; i < DESCRETE_OS_SIZE[0]; i++)
+                        for (int i = 0; i < action_space_n; i++)
                         {
                             q_table[a][b][c][d].Add(Random.Range(min_reward, max_reward));
                         }
@@ -146,19 +146,19 @@ public class DroneController : MonoBehaviour {
         // rotate the propellers
         if (throttle_front_left > 0)
         {
-            front_left_motor.transform.Rotate(-Vector3.back * (throttle_front_left / 5));
+            front_left_motor.transform.Rotate(-Vector3.back * (throttle_front_left / 3));
         }
         if (throttle_front_right > 0)
         {
-            front_right_motor.transform.Rotate(Vector3.back * (throttle_front_right / 5));
+            front_right_motor.transform.Rotate(Vector3.back * (throttle_front_right / 3));
         }
         if (throttle_back_left > 0)
         {
-            back_left_motor.transform.Rotate(Vector3.back * (throttle_back_left / 5));
+            back_left_motor.transform.Rotate(Vector3.back * (throttle_back_left / 3));
         }
         if (throttle_back_right > 0)
         {
-            back_right_motor.transform.Rotate(-Vector3.back * (throttle_back_right/5));
+            back_right_motor.transform.Rotate(-Vector3.back * (throttle_back_right/ 3));
         }
 
         epoch_time -= Time.deltaTime;
@@ -235,7 +235,7 @@ public class DroneController : MonoBehaviour {
 
             if (drone_body.transform.position.y > 1)
             {
-                reward = drone_body.transform.position.y;
+                reward = drone_body.transform.position.y*5;
             }
             else
             {
@@ -302,7 +302,7 @@ public class DroneController : MonoBehaviour {
 
     public float calculate_throttle(float throttle)
     {
-        throttle += 0.5f;
+        throttle += 1f;
         throttle = Mathf.Clamp(throttle, 0f, 50f);
         return throttle;
     }
@@ -417,7 +417,6 @@ public class DroneController : MonoBehaviour {
 
     int max_index(List<float> table)
     {
-
         int max_i = 0;
         float max_value = table[0];
         for (int i = 1; i < table.Count; i++)
