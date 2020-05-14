@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DroneController : MonoBehaviour {
+public class DroneController : MonoBehaviour
+{
     public GameObject front_left_motor;
     public GameObject front_right_motor;
     public GameObject back_left_motor;
@@ -21,9 +22,9 @@ public class DroneController : MonoBehaviour {
     public float epsilon = 0.5f;
     public int START_EPSILONE_DECAYING = 1;
 
-    private List<int> observation_space_high = new List<int>() {7, 15, 7, 50 };
+    private List<int> observation_space_high = new List<int>() { 7, 15, 7, 50 };
 
-    private List<int> observation_space_low = new List<int>() {-7, -15, -7, 0 };
+    private List<int> observation_space_low = new List<int>() { -7, -15, -7, 0 };
 
     private int action_space_n = 8;
     private float episode_reward = 0.0f;
@@ -40,7 +41,7 @@ public class DroneController : MonoBehaviour {
 
     public float min_reward = -300.0f;
     public float max_reward = 40.0f;
-    private List <int> discrete_state = new List<int>();
+    private List<int> discrete_state = new List<int>();
     private float reward = 0.0f;
     private float variance = 0.0f;
     private Vector3 drone_body_original_pos;
@@ -61,11 +62,12 @@ public class DroneController : MonoBehaviour {
     private int test = 0;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         epoch_time_copy = epoch_time;
 
         drone_body_original_pos = drone_body.transform.position;
-      
+
         END_EPSILONE_DECAYING = (int)Mathf.Ceil(EPISODES / 2);
         epsilon_decay_value = (int)epsilon / (END_EPSILONE_DECAYING - START_EPSILONE_DECAYING);
 
@@ -87,12 +89,12 @@ public class DroneController : MonoBehaviour {
         for (int i = 0; i < inputs.Count; i++)
         {
             descrete_os_win_size.Add((float)(observation_space_high[i] - observation_space_low[i]) / DESCRETE_OS_SIZE[i]);
-          
+
         }
 
-        List < List <List<List<float>>>> dim1 = new List<List<List<List<float>>>> ();
-        List < List <List<float>>> dim2 = new List<List<List<float>>> ();
-        List < List<float>> dim3 = new List<List<float>>();
+        List<List<List<List<float>>>> dim1 = new List<List<List<List<float>>>>();
+        List<List<List<float>>> dim2 = new List<List<List<float>>>();
+        List<List<float>> dim3 = new List<List<float>>();
         List<float> dim4 = new List<float>();
 
         q_table = new List<List<List<List<List<float>>>>>(DESCRETE_OS_SIZE[0]);
@@ -109,7 +111,7 @@ public class DroneController : MonoBehaviour {
             {
                 q_table[a].Add(dim2);
             }
-       
+
             for (int b = 0; b < DESCRETE_OS_SIZE[0]; b++)
             {
                 q_table[a][b] = new List<List<List<float>>>(DESCRETE_OS_SIZE[0]);
@@ -117,7 +119,7 @@ public class DroneController : MonoBehaviour {
                 {
                     q_table[a][b].Add(dim3);
                 }
-                
+
                 for (int c = 0; c < DESCRETE_OS_SIZE[0]; c++)
                 {
                     q_table[a][b][c] = new List<List<float>>(DESCRETE_OS_SIZE[0]);
@@ -125,7 +127,7 @@ public class DroneController : MonoBehaviour {
                     {
                         q_table[a][b][c].Add(dim4);
                     }
-                   
+
                     for (int d = 0; d < DESCRETE_OS_SIZE[0]; d++)
                     {
                         q_table[a][b][c][d] = new List<float>(action_space_n);
@@ -137,28 +139,29 @@ public class DroneController : MonoBehaviour {
                 }
             }
         }
-             
-        discrete_state = get_discrete_state(inputs, descrete_os_win_size, observation_space_low);      
+
+        discrete_state = get_discrete_state(inputs, descrete_os_win_size, observation_space_low);
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         // rotate the propellers
         if (throttle_front_left > 0)
         {
-            front_left_motor.transform.Rotate(-Vector3.back * (throttle_front_left / 3));
+            front_left_motor.transform.Rotate(-Vector3.back * throttle_front_left);
         }
         if (throttle_front_right > 0)
         {
-            front_right_motor.transform.Rotate(Vector3.back * (throttle_front_right / 3));
+            front_right_motor.transform.Rotate(Vector3.back * throttle_front_right);
         }
         if (throttle_back_left > 0)
         {
-            back_left_motor.transform.Rotate(Vector3.back * (throttle_back_left / 3));
+            back_left_motor.transform.Rotate(Vector3.back * throttle_back_left);
         }
         if (throttle_back_right > 0)
         {
-            back_right_motor.transform.Rotate(-Vector3.back * (throttle_back_right/ 3));
+            back_right_motor.transform.Rotate(-Vector3.back * throttle_back_right);
         }
 
         epoch_time -= Time.deltaTime;
@@ -235,7 +238,7 @@ public class DroneController : MonoBehaviour {
 
             if (drone_body.transform.position.y > 1)
             {
-                reward = drone_body.transform.position.y*5;
+                reward = drone_body.transform.position.y * 5;
             }
             else
             {
@@ -289,7 +292,7 @@ public class DroneController : MonoBehaviour {
         Debug.Log("reset");
         Vector3 angle = new Vector3(0, 0, 0);
         this.transform.eulerAngles = angle;
-        
+
         throttle_front_left = 0.0f;
         throttle_front_right = 0.0f;
         throttle_back_left = 0.0f;
@@ -297,7 +300,7 @@ public class DroneController : MonoBehaviour {
         test = 0;
         reward = 0;
 
-        this.transform.position = drone_body_original_pos;        
+        this.transform.position = drone_body_original_pos;
     }
 
     public float calculate_throttle(float throttle)
@@ -316,12 +319,12 @@ public class DroneController : MonoBehaviour {
 
     void apply_thrust(float throttle_front_left, float throttle_front_right, float throttle_back_left, float throttle_back_right)
     {
-        
+
         drone_body.AddForceAtPosition(Vector3.up * throttle_front_left, front_left_motor.transform.position);
         drone_body.AddForceAtPosition(Vector3.up * throttle_front_right, front_right_motor.transform.position);
         drone_body.AddForceAtPosition(Vector3.up * throttle_back_left, back_left_motor.transform.position);
         drone_body.AddForceAtPosition(Vector3.up * throttle_back_right, back_right_motor.transform.position);
-        
+
 
         if (this.transform.eulerAngles.y % 360 < 0)
         {
@@ -398,9 +401,9 @@ public class DroneController : MonoBehaviour {
                 drone_body.AddForceAtPosition(Vector3.left * (throttle_back_left / 2), back_left_motor.transform.position);
                 drone_body.AddForceAtPosition(Vector3.left * (throttle_back_right / 2), back_right_motor.transform.position);
             }
-          
+
         }
-          
+
     }
 
     List<int> get_discrete_state(List<float> state, List<float> descrete_os_win_size, List<int> observation_space_low)
@@ -443,5 +446,5 @@ public class DroneController : MonoBehaviour {
         }
 
         return max_v;
-    }  
+    }
 }
