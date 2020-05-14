@@ -305,7 +305,7 @@ public class DroneController : MonoBehaviour
 
     public float calculate_throttle(float throttle)
     {
-        throttle += 1f;
+        throttle += 3f;
         throttle = Mathf.Clamp(throttle, 0f, 50f);
         return throttle;
     }
