@@ -1,10 +1,10 @@
 # Machine learning games
 
-Welcome to Machine Learning Games, a repository containing set of games designed to experiment with QLearning, Neuroevolution, and PoseNet.
+Welcome to Machine Learning Games, a repository containing set of games and simulations designed to experiment with QLearning, Neuroevolution, and PoseNet.
 
 ## Games
 
-Here are some of the games and interactive applications available in this repository:
+Here are the games and simulations available in this repository:
 
 * [Ball_Q-Learning](https://github.com/Ghassen-Chaabouni/machine_learning_games/tree/master/Ball_Q-Learning): A simulation of a ball learning how to reach a target with Q-Learning.
 
